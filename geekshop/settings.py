@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'mainapp',
+    'authapp',
 ]
 
 MIDDLEWARE = [
@@ -123,7 +124,7 @@ STATICFILES_DIRS = (
     BASE_DIR / 'static',
 )
 
-MEDIA_URL = '/madia/'
+MEDIA_URL = '/media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -131,3 +132,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'authapp.ShopUser'
