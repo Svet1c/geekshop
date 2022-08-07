@@ -1,16 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-
-# Create your views here.
 from basketapp.models import Basket
 from mainapp.models import Product, Category
-
-
-def get_basket(user):
-    basket_list = 0
-    if user.is_authenticated:
-        basket_list = sum(list(Basket.objects.filter(user=user).values_list('quantity', flat=True)))
-
-    return basket_list
+from mainapp.services import get_basket, get_hot_product, get_same_products
 
 
 def index(request):
@@ -37,13 +28,26 @@ def products(request, pk=None):
             'basket': get_basket(request.user)
         }
         return render(request, 'mainapp/products_list.html', context)
+    hot_prod = get_hot_product()
+    same_prod = get_same_products(hot_prod)
     context = {
         'links_menu': links_menu,
         'basket': get_basket(request.user),
-        'hot_product': Product.objects.all().order_by('?').first(),
-        'same_products': Product.objects.all().order_by('?')[2:5]
+        'hot_product': hot_prod,
+        'same_products': same_prod
     }
     return render(request, 'mainapp/products.html', context)
+
+
+def product(request, pk):
+    links_menu = Category.objects.all() 
+    product_item = get_object_or_404(Product, pk=pk)
+    context = {
+        'product': product_item,
+        'basket': get_basket(request.user),
+        'links_menu': links_menu,
+    }
+    return render(request, 'mainapp/product.html', context)
 
 
 def contact(request):
